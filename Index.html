@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Options Money Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(52, 152, 219, 0.5);
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            color: #ecf0f1;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .trades-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #3498db;
+            font-size: 1.4rem;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        .card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ecf0f1;
+            font-size: 0.9rem;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+        }
+        
+        .trades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .trades-table th {
+            background: rgba(52, 152, 219, 0.3);
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+        
+        .trades-table td {
+            padding: 12px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        .trades-table tbody tr {
+            transition: background 0.2s ease;
+        }
+        
+        .trades-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .win {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .loss {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.03);
+        }
+        
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .balance-display {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 11px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            transition: width 0.5s ease;
+            border-radius: 11px;
+        }
+        
+        .progress-fill.complete {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .target-achieved {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            animation: celebrate 3s ease-in-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .session-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .session-count {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 5px;
+        }
+        
+        .session-status {
+            font-size: 1.1rem;
+        }
+        
+        .session-active {
+            color: #2ecc71;
+        }
+        
+        .session-completed {
+            color: #f39c12;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #3498db;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            animation: modalAppear 0.5s ease-out;
+        }
+        
+        .modal h2 {
+            color: #f39c12;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInLeft {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes modalAppear {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .trades-table {
+                font-size: 0.8rem;
+            }
+            
+            .trades-table th, .trades-table td {
+                padding: 10px 6px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .balance-display {
+                font-size: 1.8rem;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Binary Options Money Management</h1>
+            <p>Professional Trading Calculator & Performance Tracker</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="trades-section">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    <h2>Trade History & Calculations</h2>
+                </div>
+                <table class="trades-table" id="tradesTable">
+                    <thead>
+                        <tr>
+                            <th>Trade #</th>
+                            <th>Result</th>
+                            <th>Investment</th>
+                            <th>Trade %</th>
+                            <th>Amount</th>
+                            <th>Return</th>
+                            <th>P/L</th>
+                            <th>Balance</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tradesBody">
+                        <!-- Trade data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="sidebar">
+                <div class="card">
+                    <h3><i class="fas fa-calendar-alt"></i> Session Management</h3>
+                    <div class="session-info">
+                        <div class="session-count" id="sessionCount">Session #1</div>
+                        <div class="session-status" id="sessionStatus">
+                            <span class="session-active">Active</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" id="newSessionBtn" disabled>
+                        <i class="fas fa-plus-circle"></i> Start New Session
+                    </button>
+                    <button class="btn btn-warning" onclick="clearCurrentSession()">
+                        <i class="fas fa-eraser"></i> Clear Current Session
+                    </button>
+                    <button class="btn btn-danger" onclick="clearAllSessions()">
+                        <i class="fas fa-trash-alt"></i> Clear All Sessions
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-wallet"></i> Account Balance</h3>
+                    <div class="balance-display" id="currentBalance">$1,000.00</div>
+                    <div class="input-group">
+                        <label>Initial Investment</label>
+                        <input type="number" id="initialInvestment" value="1000" step="0.01">
+                    </div>
+                    <button class="btn" onclick="resetAccount()">
+                        <i class="fas fa-sync-alt"></i> Reset Account
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> Add New Trade</h3>
+                    <div class="input-group">
+                        <label>Trade Result</label>
+                        <select id="tradeResult">
+                            <option value="WIN">WIN</option>
+                            <option value="LOSS">LOSS</option>
+                            <option value="ATM">ATM (Break Even)</option>
+                        </select>
+                    </div>
+                    <div class="stat-item" style="margin: 15px 0; padding: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Current Risk Percentage:</span>
+                            <span class="stat-value" id="currentRiskDisplay">5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-item" style="margin: 15px 0; padding: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Trade Amount:</span>
+                            <span class="stat-value" id="currentTradeAmount">$50.00</span>
+                        </div>
+                    </div>
+                    <button class="btn" id="addTradeBtn" onclick="addTrade()">
+                        <i class="fas fa-plus"></i> Add Trade
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-bullseye"></i> Trading Plan</h3>
+                    <div class="input-group">
+                        <label>Today's Target Percentage (%)</label>
+                        <input type="number" id="dailyTargetPercent" value="20" step="0.1" min="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label>Today's Risk Percentage (%)</label>
+                        <input type="number" id="tradePercentage" value="5" step="0.1" min="0.1" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Broker Return Rate (%)</label>
+                        <input type="number" id="brokerReturn" value="90" step="1" min="1" max="200">
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="todaysTargetPercent">20%</div>
+                            <div class="stat-label">Today's Target</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="todaysRiskPercent">5%</div>
+                            <div class="stat-label">Today's Risk</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="targetProgress" style="width: 0%"></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <span id="targetAchieved">$0.00</span> / 
+                        <span id="targetDisplay">$200.00</span>
+                    </div>
+                    <div id="targetCompletedMessage" style="display: none;" class="target-achieved">
+                        <i class="fas fa-trophy"></i> 🎉 Target Achieved! 🎉<br>
+                        Session Completed Successfully!
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-chart-pie"></i> Performance Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalTrades">0</div>
+                            <div class="stat-label">Total Trades</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="winRate">0%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalProfit">$0.00</div>
+                            <div class="stat-label">Total P/L</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="remainingTarget">$200.00</div>
+                            <div class="stat-label">Remaining Target</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Binary Options Money Management Tool v1.0 | Trade Responsibly</p>
+        </div>
+    </div>
+    
+    <!-- Target Achieved Modal -->
+    <div id="targetModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-trophy"></i> 🎉 Congratulations! 🎉</h2>
+            <p>You have successfully achieved your daily target!</p>
+            <p>Session completed with <span id="modalProfit" class="stat-value">$0.00</span> profit.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-success" onclick="startNewSessionFromModal()">
+                    <i class="fas fa-plus-circle"></i> Start New Session
+                </button>
+                <button class="modal-btn btn-warning" onclick="continueTrading()">
+                    <i class="fas fa-play-circle"></i> Continue Trading
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Trading data
+        let trades = [];
+        let currentBalance = 1000;
+        let initialBalance = 1000;
+        let tradeCounter = 1;
+        let sessionCounter = 1;
+        let sessionStartBalance = 1000;
+        let targetAchieved = false;
+        let sessionCompleted = false;
+        
+        // Format currency
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+        
+        // Update balance display
+        function updateBalance() {
+            document.getElementById('currentBalance').textContent = formatCurrency(currentBalance);
+        }
+        
+        // Update session info
+        function updateSessionInfo() {
+            document.getElementById('sessionCount').textContent = `Session #${sessionCounter}`;
+            const statusElement = document.getElementById('sessionStatus');
+            
+            if (sessionCompleted) {
+                statusElement.innerHTML = '<span class="session-completed">Completed</span>';
+            } else {
+                statusElement.innerHTML = '<span class="session-active">Active</span>';
+            }
+            
+            // Enable/disable new session button
+            document.getElementById('newSessionBtn').disabled = !sessionCompleted;
+        }
+        
+        // Check if target is achieved
+        function checkTargetAchieved() {
+            const dailyTargetPercent = parseFloat(document.getElementById('dailyTargetPercent').value) || 20;
+            const todaysTargetAmount = sessionStartBalance * (dailyTargetPercent / 100);
+            const currentProfit = currentBalance - sessionStartBalance;
+            
+            if (currentProfit >= todaysTargetAmount && !targetAchieved) {
+                targetAchieved = true;
+                sessionCompleted = true;
+                
+                // Show target completed message
+                document.getElementById('targetCompletedMessage').style.display = 'block';
+                
+                // Update progress bar to complete state
+                document.getElementById('targetProgress').classList.add('complete');
+                
+                // Disable add trade button
+                document.getElementById('addTradeBtn').disabled = true;
+                
+                // Show modal
+                document.getElementById('modalProfit').textContent = formatCurrency(currentProfit);
+                document.getElementById('targetModal').style.display = 'block';
+                
+                // Update session info
+                updateSessionInfo();
+            }
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const totalTrades = trades.filter(t => t.session === sessionCounter).length;
+            const winTrades = trades.filter(t => t.session === sessionCounter && t.result === 'WIN').length;
+            const winRate = totalTrades > 0 ? ((winTrades / totalTrades) * 100).toFixed(1) : 0;
+            
+            // Get current percentages from inputs
+            const dailyTargetPercent = parseFloat(document.getElementById('dailyTargetPercent').value) || 20;
+            const tradePercentage = parseFloat(document.getElementById('tradePercentage').value) || 5;
+            
+            // Today's Target Logic: Session Start Balance * Target Percentage
+            const todaysTargetAmount = sessionStartBalance * (dailyTargetPercent / 100);
+            
+            // Today's Risk Logic: Current Balance * Risk Percentage
+            const todaysRiskAmount = currentBalance * (tradePercentage / 100);
+            
+            // Target Achieved Logic: Current Balance - Session Start Balance
+            const targetAchievedAmount = currentBalance - sessionStartBalance;
+            
+            // Remaining Target Logic: Today's Target Amount - Target Achieved
+            const remainingTarget = Math.max(0, todaysTargetAmount - targetAchievedAmount);
+            
+            // Target Progress Calculation
+            const targetProgress = todaysTargetAmount > 0 ? 
+                Math.min(100, Math.max(0, (targetAchievedAmount / todaysTargetAmount) * 100)) : 0;
+            
+            // Update display values
+            document.getElementById('totalTrades').textContent = totalTrades;
+            document.getElementById('winRate').textContent = winRate + '%';
+            document.getElementById('totalProfit').textContent = formatCurrency(targetAchievedAmount);
+            document.getElementById('targetAchieved').textContent = formatCurrency(targetAchievedAmount);
+            document.getElementById('targetDisplay').textContent = formatCurrency(todaysTargetAmount);
+            document.getElementById('remainingTarget').textContent = formatCurrency(remainingTarget);
+            document.getElementById('targetProgress').style.width = targetProgress + '%';
+            
+            // Update trading plan display percentages
+            document.getElementById('todaysTargetPercent').textContent = dailyTargetPercent + '%';
+            document.getElementById('todaysRiskPercent').textContent = tradePercentage + '%';
+            
+            // Update Add Trade section displays
+            document.getElementById('currentRiskDisplay').textContent = tradePercentage + '%';
+            document.getElementById('currentTradeAmount').textContent = formatCurrency(todaysRiskAmount);
+            
+            // Check if target is achieved
+            checkTargetAchieved();
+        }
+        
+        // Add a new trade
+        function addTrade() {
+            if (sessionCompleted) {
+                alert('Session completed! Please start a new session to continue trading.');
+                return;
+            }
+            
+            const result = document.getElementById('tradeResult').value;
+            const tradePercentage = parseFloat(document.getElementById('tradePercentage').value) || 5;
+            const brokerReturn = parseFloat(document.getElementById('brokerReturn').value) || 90;
+            
+            // Investment Logic: Current balance
+            const investment = currentBalance;
+            
+            // Trade Amount Logic: Investment * Trade Percentage
+            const tradeAmount = investment * (tradePercentage / 100);
+            
+            // Investment Return Logic: Trade Amount * Broker Return Rate
+            const investmentReturn = tradeAmount * (brokerReturn / 100);
+            
+            // Win/Loss Amount Logic
+            let winLossAmount = 0;
+            if (result === 'WIN') {
+                winLossAmount = investmentReturn;
+            } else if (result === 'LOSS') {
+                winLossAmount = -tradeAmount;
+            } 
+            // ATM (break even) already set to 0
+            
+            // Update current balance
+            currentBalance += winLossAmount;
+            
+            const trade = {
+                id: tradeCounter,
+                result: result,
+                investment: investment,
+                tradePercentage: tradePercentage,
+                tradeAmount: tradeAmount,
+                returnAmount: result === 'WIN' ? investmentReturn : 0,
+                profitLoss: winLossAmount,
+                balance: currentBalance,
+                session: sessionCounter
+            };
+            
+            trades.push(trade);
+            tradeCounter++;
+            
+            updateTradesTable();
+            updateBalance();
+            updateStats();
+        }
+        
+        // Delete a trade
+        function deleteTrade(id) {
+            const tradeIndex = trades.findIndex(t => t.id === id);
+            if (tradeIndex === -1) return;
+            
+            // Remove the trade's effect from current balance
+            const trade = trades[tradeIndex];
+            currentBalance -= trade.profitLoss;
+            
+            // Remove the trade from array
+            trades.splice(tradeIndex, 1);
+            
+            // Recalculate balances for all remaining trades in this session
+            let runningBalance = sessionStartBalance;
+            const sessionTrades = trades.filter(t => t.session === sessionCounter);
+            
+            for (let trade of sessionTrades) {
+                runningBalance += trade.profitLoss;
+                trade.balance = runningBalance;
+            }
+            
+            // Update current balance
+            currentBalance = runningBalance;
+            
+            // Reset target achieved status if we're below target now
+            if (targetAchieved) {
+                const dailyTargetPercent = parseFloat(document.getElementById('dailyTargetPercent').value) || 20;
+                const todaysTargetAmount = sessionStartBalance * (dailyTargetPercent / 100);
+                const currentProfit = currentBalance - sessionStartBalance;
+                
+                if (currentProfit < todaysTargetAmount) {
+                    targetAchieved = false;
+                    sessionCompleted = false;
+                    document.getElementById('targetCompletedMessage').style.display = 'none';
+                    document.getElementById('targetProgress').classList.remove('complete');
+                    document.getElementById('addTradeBtn').disabled = false;
+                    document.getElementById('targetModal').style.display = 'none';
+                }
+            }
+            
+            updateTradesTable();
+            updateBalance();
+            updateStats();
+            updateSessionInfo();
+        }
+        
+        // Update trades table
+        function updateTradesTable() {
+            const tbody = document.getElementById('tradesBody');
+            tbody.innerHTML = '';
+            
+            // Show only current session trades
+            const currentSessionTrades = trades.filter(t => t.session === sessionCounter);
+            
+            currentSessionTrades.forEach(trade => {
+                const row = tbody.insertRow();
+                
+                row.innerHTML = `
+                    <td>${trade.id}</td>
+                    <td class="${trade.result.toLowerCase()}">${trade.result}</td>
+                    <td>${formatCurrency(trade.investment)}</td>
+                    <td>${trade.tradePercentage}%</td>
+                    <td>${formatCurrency(trade.tradeAmount)}</td>
+                    <td>${trade.result === 'WIN' ? formatCurrency(trade.returnAmount) : '-'}</td>
+                    <td class="${trade.profitLoss >= 0 ? 'win' : 'loss'}">${formatCurrency(trade.profitLoss)}</td>
+                    <td>${formatCurrency(trade.balance)}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteTrade(${trade.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+            });
+        }
+        
+        // Start a new session
+        function startNewSession() {
+            sessionCounter++;
+            sessionStartBalance = currentBalance;
+            targetAchieved = false;
+            sessionCompleted = false;
+            
+            // Reset UI elements
+            document.getElementById('targetCompletedMessage').style.display = 'none';
+            document.getElementById('targetProgress').classList.remove('complete');
+            document.getElementById('addTradeBtn').disabled = false;
+            document.getElementById('targetModal').style.display = 'none';
+            
+            updateSessionInfo();
+            updateTradesTable();
+            updateStats();
+        }
+        
+        // Start new session from modal
+        function startNewSessionFromModal() {
+            startNewSession();
+        }
+        
+        // Continue trading after target achieved
+        function continueTrading() {
+            targetAchieved = false;
+            sessionCompleted = false;
+            
+            // Reset UI elements
+            document.getElementById('targetCompletedMessage').style.display = 'none';
+            document.getElementById('targetProgress').classList.remove('complete');
+            document.getElementById('addTradeBtn').disabled = false;
+            document.getElementById('targetModal').style.display = 'none';
+            
+            updateSessionInfo();
+            updateStats();
+        }
+        
+        // Clear current session
+        function clearCurrentSession() {
+            if (confirm('Are you sure you want to clear the current session? This will remove all trades from this session.')) {
+                // Remove current session trades
+                trades = trades.filter(t => t.session !== sessionCounter);
+                
+                // Reset to session start balance
+                currentBalance = sessionStartBalance;
+                
+                // Reset session status
+                targetAchieved = false;
+                sessionCompleted = false;
+                
+                // Reset UI elements
+                document.getElementById('targetCompletedMessage').style.display = 'none';
+                document.getElementById('targetProgress').classList.remove('complete');
+                document.getElementById('addTradeBtn').disabled = false;
+                document.getElementById('targetModal').style.display = 'none';
+                
+                updateTradesTable();
+                updateBalance();
+                updateStats();
+                updateSessionInfo();
+            }
+        }
+        
+        // Clear all sessions
+        function clearAllSessions() {
+            if (confirm('Are you sure you want to clear all sessions and reset everything? This action cannot be undone.')) {
+                trades = [];
+                tradeCounter = 1;
+                sessionCounter = 1;
+                currentBalance = initialBalance;
+                sessionStartBalance = initialBalance;
+                targetAchieved = false;
+                sessionCompleted = false;
+                
+                // Reset UI elements
+                document.getElementById('targetCompletedMessage').style.display = 'none';
+                document.getElementById('targetProgress').classList.remove('complete');
+                document.getElementById('addTradeBtn').disabled = false;
+                document.getElementById('targetModal').style.display = 'none';
+                
+                // Reset inputs to defaults
+                document.getElementById('initialInvestment').value = "1000";
+                document.getElementById('dailyTargetPercent').value = "20";
+                document.getElementById('tradePercentage').value = "5";
+                document.getElementById('brokerReturn').value = "90";
+                
+                updateTradesTable();
+                updateBalance();
+                updateStats();
+                updateSessionInfo();
+            }
+        }
+        
+        // Reset account
+        function resetAccount() {
+            const newBalance = parseFloat(document.getElementById('initialInvestment').value) || 1000;
+            initialBalance = newBalance;
+            currentBalance = newBalance;
+            sessionStartBalance = newBalance;
+            
+            updateBalance();
+            updateStats();
+        }
+        
+        // Initialize the application
+        function init() {
+            updateBalance();
+            updateStats();
+            updateSessionInfo();
+            
+            // Add event listeners to inputs to recalculate when values change
+            document.getElementById('initialInvestment').addEventListener('input', resetAccount);
+            document.getElementById('dailyTargetPercent').addEventListener('input', updateStats);
+            document.getElementById('tradePercentage').addEventListener('input', updateStats);
+            document.getElementById('brokerReturn').addEventListener('input', updateStats);
+        }
+        
+        // Initialize when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
